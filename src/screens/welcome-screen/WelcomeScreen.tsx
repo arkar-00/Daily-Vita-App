@@ -1,20 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert, StyleSheet, Text, View } from "react-native";
-import LottieView from "lottie-react-native";
 import CustomButton from "../../components/CustomButton";
 import COLORS from "../../assets/colors";
+import LottieImage from "../../components/LottieImage";
 
 export default function WelcomeScreen() {
-  const animationRef = useRef<LottieView>(null);
-
-  useEffect(() => {
-    animationRef.current?.play();
-
-    // Or set a specific startFrame and endFrame with:
-    animationRef.current?.play(30, 120);
-  }, []);
   const onPress = () => {
     Alert.alert("Let’s go!", "We’ll ask a couple of questions next.");
   };
@@ -29,11 +21,7 @@ export default function WelcomeScreen() {
       </View>
 
       <View style={styles.illusPlaceholder}>
-        <LottieView
-          style={styles.illus}
-          ref={animationRef}
-          source={require("../../assets/lottie/Welcome.json")}
-        />
+        <LottieImage source={require("../../assets/lottie/Welcome.json")} />
 
         <Text style={styles.body}>
           We’ll ask a couple of questions to better understand your vitamin
@@ -76,10 +64,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginVertical: 18,
-  },
-  illus: {
-    width: "85%",
-    height: 250,
   },
   body: {
     fontSize: 16,
