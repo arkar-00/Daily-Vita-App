@@ -2,9 +2,8 @@ import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert, StyleSheet, Text, View } from "react-native";
-import CustomButton from "../../components/CustomButton";
 import COLORS from "../../assets/colors";
-import LottieImage from "../../components/LottieImage";
+import { CustomButton, LottieImage } from "../../components";
 
 export default function WelcomeScreen() {
   const onPress = () => {
