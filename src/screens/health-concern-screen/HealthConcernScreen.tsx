@@ -13,16 +13,15 @@ const HealthConcernScreen = () => {
     <SafeAreaView style={styles.screen}>
       <View style={styles.header}>
         <Text style={styles.title}>
-          Select the top health concerns.<Text style={{ color: COLORS.button }}>*</Text> (up to 5)
+          Select the top health concerns.
+          <Text style={{ color: COLORS.button }}>*</Text> (up to 5)
         </Text>
       </View>
 
       <SelectButton />
 
       <View style={styles.header}>
-        <Text style={styles.title}>
-          Prioritize
-        </Text>
+        <Text style={styles.title}>Prioritize</Text>
       </View>
     </SafeAreaView>
   );
