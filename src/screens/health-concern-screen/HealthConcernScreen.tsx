@@ -2,10 +2,9 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import COLORS from "../../assets/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { CustomButton, SelectButton } from "../../components";
+import { CustomButton, Draglist, SelectButton } from "../../components";
 import healthConcerns from "../../data/Healthconcern.json";
 import { selectedItem } from "../../components/SelectButton";
-import HealthConcernDragList from "../../components/HealthConcernDragList";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
 
 const HealthConcernScreen = () => {
@@ -46,7 +45,7 @@ const HealthConcernScreen = () => {
 
       <Text style={styles.title}>Prioritize</Text>
       <View style={{ flex: 1 }}>
-        <HealthConcernDragList data={selected} onChange={setSelected} />
+        <Draglist data={selected} onChange={setSelected} />
       </View>
 
       <View style={styles.buttonContainer}>
