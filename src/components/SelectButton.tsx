@@ -1,33 +1,34 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, Pressable, StyleSheet, Button } from "react-native";
 import COLORS from "../assets/colors";
-import healthConcerns from "../data/Healthconcern.json";
 
-export default function SelectButtonUnlimited() {
-  const TAGS = (healthConcerns?.data ?? []).map((item: any) => ({
-    id: String(item.id),
-    label: String(item.name),
-  }));
+export type selectedItem = {
+  id: number;
+  label: string;
+}
 
-  const [selected, setSelected] = useState<string[]>([]);
+type SelectButtonProps = {
+  selectedItems: selectedItem[];
+  onSelectionChange: (item: selectedItem) => void;
+  data: selectedItem[];
+};
 
-  function toggle(id: string) {
-    if (selected.includes(id)) {
-      setSelected(selected.filter((x) => x !== id));
-    } else {
-      setSelected([...selected, id]);
-    }
-  }
+export default function SelectButtonUnlimited({
+  selectedItems,
+  onSelectionChange,
+  data,
+}: SelectButtonProps) {
 
   return (
     <View style={styles.container}>
       <View style={styles.wrap}>
-        {TAGS.map((item) => {
-          const isSelected = selected.includes(item.id);
+        {data.map((item) => {
+          
+          const isSelected = selectedItems?.find((i) => i.id === item.id)? true : false;
           return (
             <Pressable
               key={item.id}
-              onPress={() => toggle(item.id)}
+              onPress={() => onSelectionChange?.(item)}
               style={[
                 styles.chip,
                 isSelected ? styles.chipSelected : styles.chipDefault,
@@ -46,30 +47,19 @@ export default function SelectButtonUnlimited() {
         })}
       </View>
 
-      {/* <View style={styles.footerRow}>
-        <Button
-          title="Log Selected"
-          onPress={() => {
-            const labels = TAGS.filter((t) => selected.includes(t.id)).map(
-              (t) => t.label
-            );
-            console.log("Selected IDs & Labels:", selected, labels);
-          }}
-        />
-      </View> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    padding: 16, 
-    backgroundColor: COLORS.bg, 
-    borderRadius: 16 
+  container: {
+    padding: 16,
+    backgroundColor: COLORS.bg,
+    borderRadius: 16,
   },
-  wrap: { 
-    flexDirection: "row", 
-    flexWrap: "wrap" 
+  wrap: {
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   chip: {
     borderRadius: 20,
@@ -79,27 +69,22 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderWidth: 1.5,
   },
-  chipDefault: { 
-    backgroundColor: COLORS.bg, 
-    borderColor: COLORS.text 
+  chipDefault: {
+    backgroundColor: COLORS.bg,
+    borderColor: COLORS.text,
   },
-  chipSelected: { 
-    backgroundColor: COLORS.bs, 
-    borderColor: COLORS.bs 
+  chipSelected: {
+    backgroundColor: COLORS.bs,
+    borderColor: COLORS.bs,
   },
-  chipText: { 
-    fontSize: 14, 
-    fontWeight: "600" 
+  chipText: {
+    fontSize: 14,
+    fontWeight: "600",
   },
-  textDefault: { 
-    color: COLORS.text 
+  textDefault: {
+    color: COLORS.text,
   },
-  textSelected: { 
-    color: COLORS.buttonText 
+  textSelected: {
+    color: COLORS.buttonText,
   },
-  // footerRow: { 
-  //   marginTop: 10, 
-  //   flexDirection: "row", 
-  //   alignItems: "center" 
-  // }
 });

@@ -1,14 +1,34 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList } from "../../types";
+import React, { useState } from "react";
 import COLORS from "../../assets/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { SelectButton } from "../../components";
+import { CustomButton, SelectButton } from "../../components";
+import healthConcerns from "../../data/Healthconcern.json";
+import { selectedItem } from "../../components/SelectButton";
+import HealthConcernDragList from "../../components/HealthConcernDragList";
+import { useAppNavigation } from "../../hooks/useAppNavigation";
 
 const HealthConcernScreen = () => {
-  const route = useRoute<RouteProp<RootStackParamList, "HealthConcern">>();
-  const name = route.params.name;
+  const navigation = useAppNavigation();
+  const onPressback = () => {
+    navigation.goBack();
+  };
+  const [selected, setSelected] = useState<selectedItem[]>([]);
+  console.log("Selected Items:", selected);
+
+  const HConcernData = healthConcerns.data.map((item) => ({
+    id: item.id,
+    label: item.name,
+  }));
+
+  function toggle(item: selectedItem) {
+    if (selected.find((i) => i.id === item.id)) {
+      setSelected(selected.filter((i) => i.id !== item.id));
+    } else {
+      setSelected([...selected, item]);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.header}>
@@ -18,10 +38,25 @@ const HealthConcernScreen = () => {
         </Text>
       </View>
 
-      <SelectButton />
+      <SelectButton
+        data={HConcernData}
+        selectedItems={selected}
+        onSelectionChange={toggle}
+      />
 
-      <View style={styles.header}>
-        <Text style={styles.title}>Prioritize</Text>
+      <Text style={styles.title}>Prioritize</Text>
+      <View style={{ flex: 1 }}>
+        <HealthConcernDragList data={selected} onChange={setSelected} />
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <CustomButton
+          text="Back"
+          onPress={onPressback}
+          style={{ ...styles.button, backgroundColor: "transparent" }}
+          textStyle={{ color: COLORS.text }}
+        />
+        <CustomButton text="Next" onPress={() => {}} style={styles.button} />
       </View>
     </SafeAreaView>
   );
@@ -43,5 +78,13 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: COLORS.text,
     marginBottom: 6,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 10,
   },
 });
