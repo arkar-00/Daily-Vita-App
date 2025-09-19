@@ -3,6 +3,7 @@ const COLORS = {
   card: "#E9F7EF", // light green card
   text: "#20323A", // dark slate
   sub: "#3E5963",
+  bs: "#1F3A56",
   button: "#F35C4A", // coral/red
   buttonText: "#FFFFFF",
   border: "#B7E1CF",

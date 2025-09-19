@@ -1,6 +1,11 @@
 import React from "react";
-import WelcomeScreen from "./src/screens/welcome-screen/WelcomeScreen";
+import RootNavigator from "./src/navigations/RootNavigator";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
-  return <WelcomeScreen />;
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <RootNavigator />
+    </GestureHandlerRootView>
+  );
 }

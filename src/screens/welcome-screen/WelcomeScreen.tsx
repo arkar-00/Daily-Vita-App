@@ -1,13 +1,16 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import COLORS from "../../assets/colors";
 import { CustomButton, LottieImage } from "../../components";
+import { useAppNavigation } from "../../hooks/useAppNavigation";
+
 
 export default function WelcomeScreen() {
+  const navigation = useAppNavigation();
   const onPress = () => {
-    Alert.alert("Let’s go!", "We’ll ask a couple of questions next.");
+    navigation.navigate("HealthConcern");
   };
 
   return (
@@ -41,7 +44,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: COLORS.bg,
-    // alignItems: "center",
     justifyContent: "space-evenly",
     padding: 16,
   },
