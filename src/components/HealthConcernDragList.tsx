@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import DraggableFlatList, {
   RenderItemParams,
@@ -13,29 +13,24 @@ type Props = {
   onChange: (next: selectedItem[]) => void;
 };
 
-export default function SimpleDragList({ data, onChange }: Props) {
-  const renderItem = ({
-    item,
-    drag,
-    isActive,
-  }: RenderItemParams<selectedItem>) => (
-    <ScaleDecorator>
-      <TouchableOpacity
-        delayLongPress={100}
-        onLongPress={drag}
-        disabled={isActive}
-        style={styles.row}
-      >
-        <Text style={[styles.label, styles.chip, isActive && styles.labelActive]}>
-          {item.label}
-        </Text>
-        <Menu
-          size={20}
-          color={COLORS.bs}
-          strokeWidth={2}
-        />
-      </TouchableOpacity>
-    </ScaleDecorator>
+function SimpleDragList({ data, onChange }: Props) {
+  const RenderItem = memo(
+    ({ item, drag, isActive }: RenderItemParams<selectedItem>) => (
+      <ScaleDecorator>
+        <TouchableOpacity
+          delayLongPress={100}
+          onLongPress={drag}
+          disabled={isActive}
+          style={{
+            ...styles.row,
+            backgroundColor: isActive ? "grey" : "white",
+          }}
+        >
+          <Text style={{ ...styles.label, ...styles.chip }}>{item.label}</Text>
+          <Menu size={20} color={COLORS.bs} strokeWidth={2} />
+        </TouchableOpacity>
+      </ScaleDecorator>
+    )
   );
 
   return (
@@ -43,13 +38,15 @@ export default function SimpleDragList({ data, onChange }: Props) {
       scrollEnabled
       showsVerticalScrollIndicator={false}
       data={data}
-      keyExtractor={(it) => String(it.id)}
+      keyExtractor={(it) => it.id.toString()}
       onDragEnd={({ data: next }) => onChange(next)}
-      renderItem={renderItem}
+      renderItem={(params) => <RenderItem {...params} />}
       contentContainerStyle={{ paddingVertical: 6, paddingHorizontal: 20 }}
     />
   );
 }
+
+export default memo(SimpleDragList);
 
 const styles = StyleSheet.create({
   row: {
@@ -57,8 +54,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "COLORS.bs",
-    backgroundColor: "azure",
+    borderColor: COLORS.bs,
     marginBottom: 8,
     flexDirection: "row",
     alignItems: "center",

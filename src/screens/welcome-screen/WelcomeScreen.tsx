@@ -10,7 +10,7 @@ import { useAppNavigation } from "../../hooks/useAppNavigation";
 export default function WelcomeScreen() {
   const navigation = useAppNavigation();
   const onPress = () => {
-    navigation.navigate("HealthConcern", { name: "HealthConcern" });
+    navigation.navigate("HealthConcern");
   };
 
   return (

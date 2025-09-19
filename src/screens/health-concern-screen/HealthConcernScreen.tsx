@@ -9,11 +9,13 @@ import { useAppNavigation } from "../../hooks/useAppNavigation";
 
 const HealthConcernScreen = () => {
   const navigation = useAppNavigation();
-  const onPressback = () => {
+  const onPressBack = () => {
     navigation.goBack();
   };
+  const onPressNext = () => {
+    navigation.navigate("DietChoice");
+  };
   const [selected, setSelected] = useState<selectedItem[]>([]);
-  console.log("Selected Items:", selected);
 
   const HConcernData = healthConcerns.data.map((item) => ({
     id: item.id,
@@ -51,11 +53,11 @@ const HealthConcernScreen = () => {
       <View style={styles.buttonContainer}>
         <CustomButton
           text="Back"
-          onPress={onPressback}
+          onPress={onPressBack}
           style={{ ...styles.button, backgroundColor: "transparent" }}
           textStyle={{ color: COLORS.text }}
         />
-        <CustomButton text="Next" onPress={() => {}} style={styles.button} />
+        <CustomButton text="Next" onPress={onPressNext} style={styles.button} />
       </View>
     </SafeAreaView>
   );

@@ -1,6 +1,7 @@
 type RootStackParamList = {
   Welcome: undefined;
-  HealthConcern: {name?: string};
+  HealthConcern: undefined;
+  DietChoice: undefined;
 };
 
 export type { RootStackParamList };
