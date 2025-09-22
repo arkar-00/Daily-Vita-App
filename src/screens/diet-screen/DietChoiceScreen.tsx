@@ -11,10 +11,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { CheckSquare, Square, Info } from "lucide-react-native";
 import COLORS from "../../assets/colors";
 import dietsFile from "../../data/Diets.json";
+import { CustomButton } from "../../components";
+import { useAppNavigation } from "../../hooks/useAppNavigation";
 
 type Diet = { id: number; name: string; tool_tip?: string };
 
 export default function DietChoiceScreen() {
+  const navigation = useAppNavigation();
+    const onPressBack = () => {
+      navigation.goBack();
+    };
+    const onPressNext = () => {
+      navigation.navigate("AllergiesAlertScreen");
+    };
   const dietData: Diet[] = [
     ...((dietsFile as { data: Diet[] }).data ?? []),
     { id: -1, name: "None" },
@@ -85,6 +94,16 @@ export default function DietChoiceScreen() {
         ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
         showsVerticalScrollIndicator={false}
       />
+
+      <View style={styles.buttonContainer}>
+        <CustomButton
+          text="Back"
+          onPress={onPressBack}
+          style={{ ...styles.button, backgroundColor: "transparent" }}
+          textStyle={{ color: COLORS.text }}
+        />
+        <CustomButton text="Next" onPress={onPressNext} style={styles.button} />
+      </View>
     </SafeAreaView>
   );
 }
@@ -121,5 +140,13 @@ const styles = StyleSheet.create({
   },
   labelChecked: {
     fontWeight: "700",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 10,
   },
 });

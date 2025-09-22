@@ -13,24 +13,34 @@ type Props = {
   onChange: (next: selectedItem[]) => void;
 };
 
-function SimpleDragList({ data, onChange }: Props) {
-  const RenderItem = memo(
-    ({ item, drag, isActive }: RenderItemParams<selectedItem>) => (
-      <ScaleDecorator>
-        <TouchableOpacity
-          delayLongPress={100}
-          onLongPress={drag}
-          disabled={isActive}
-          style={{
-            ...styles.row,
-            backgroundColor: isActive ? "grey" : "white",
-          }}
-        >
-          <Text style={{ ...styles.label, ...styles.chip }}>{item.label}</Text>
-          <Menu size={20} color={COLORS.bs} strokeWidth={2} />
-        </TouchableOpacity>
-      </ScaleDecorator>
-    )
+const RenderItem = memo(
+  ({ item, drag, isActive }: RenderItemParams<selectedItem>) => (
+    <ScaleDecorator>
+      <TouchableOpacity
+        delayLongPress={100}
+        onLongPress={drag}
+        disabled={isActive}
+        style={[styles.row, { backgroundColor: isActive ? "grey" : "white" }]}
+      >
+        <Text style={[styles.label, styles.chip]}>{item.label}</Text>
+        <Menu size={20} color={COLORS.bs} strokeWidth={2} />
+      </TouchableOpacity>
+    </ScaleDecorator>
+  ),
+  (prev, next) =>
+    prev.item.id === next.item.id &&
+    prev.isActive === next.isActive &&
+    prev.item.label === next.item.label
+);
+
+const SimpleDragList = memo(({ data, onChange }: Props) => {
+  const keyExtractor = useCallback(
+    (item: selectedItem) => item.id.toString(),
+    []
+  );
+  const handleDragEnd = useCallback(
+    ({ data: next }: { data: selectedItem[] }) => onChange(next),
+    [onChange]
   );
 
   return (
@@ -38,17 +48,21 @@ function SimpleDragList({ data, onChange }: Props) {
       scrollEnabled
       showsVerticalScrollIndicator={false}
       data={data}
-      keyExtractor={(it) => it.id.toString()}
-      onDragEnd={({ data: next }) => onChange(next)}
+      keyExtractor={keyExtractor}
+      onDragEnd={handleDragEnd}
       renderItem={(params) => <RenderItem {...params} />}
-      contentContainerStyle={{ paddingVertical: 6, paddingHorizontal: 20 }}
+      contentContainerStyle={styles.container}
     />
   );
-}
+});
 
-export default memo(SimpleDragList);
+export default SimpleDragList;
 
 const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 6,
+    paddingHorizontal: 20,
+  },
   row: {
     minHeight: 52,
     paddingHorizontal: 8,
@@ -73,8 +87,5 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: "600",
-  },
-  labelActive: {
-    color: COLORS.buttonText,
   },
 });

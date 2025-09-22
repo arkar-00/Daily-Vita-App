@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import COLORS from "../../assets/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomButton, Draglist, SelectButton } from "../../components";
@@ -16,6 +16,11 @@ const HealthConcernScreen = () => {
     navigation.navigate("DietChoice");
   };
   const [selected, setSelected] = useState<selectedItem[]>([]);
+  const [draggedItems, setDraggedItems] = useState<selectedItem[]>([]);
+
+  useEffect(() => {
+    setDraggedItems(selected);
+  }, [selected]);
 
   const HConcernData = healthConcerns.data.map((item) => ({
     id: item.id,
@@ -47,7 +52,7 @@ const HealthConcernScreen = () => {
 
       <Text style={styles.title}>Prioritize</Text>
       <View style={{ flex: 1 }}>
-        <Draglist data={selected} onChange={setSelected} />
+        <Draglist data={draggedItems} onChange={setDraggedItems} />
       </View>
 
       <View style={styles.buttonContainer}>

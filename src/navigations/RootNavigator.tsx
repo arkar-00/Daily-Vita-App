@@ -1,7 +1,12 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types";
 import { createStaticNavigation } from "@react-navigation/native";
-import { WelcomeScreen, HealthConcernScreen, DietChoiceScreen } from "../screens";
+import {
+  WelcomeScreen,
+  HealthConcernScreen,
+  DietChoiceScreen,
+  AllergiesAlertScreen,
+} from "../screens";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>({
   screens: {
@@ -19,6 +24,12 @@ const RootStack = createNativeStackNavigator<RootStackParamList>({
     },
     DietChoice: {
       screen: DietChoiceScreen,
+      options: {
+        headerShown: false,
+      },
+    },
+    AllergiesAlertScreen: {
+      screen: AllergiesAlertScreen,
       options: {
         headerShown: false,
       },
