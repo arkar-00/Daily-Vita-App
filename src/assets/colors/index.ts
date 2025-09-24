@@ -7,6 +7,7 @@ const COLORS = {
   button: "#F35C4A", // coral/red
   buttonText: "#FFFFFF",
   border: "#B7E1CF",
+  textSecondary: "#6B7280",
 };
 
 export default COLORS;

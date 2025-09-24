@@ -1,4 +1,5 @@
 export { default as WelcomeScreen } from "./welcome-screen/WelcomeScreen";
 export { default as HealthConcernScreen } from "./health-concern-screen/HealthConcernScreen";
 export { default as DietChoiceScreen } from "./diet-screen/DietChoiceScreen";
-export { default as AllergiesAlertScreen } from "./allergies-screen/AllergiesAlertScreen"
+export { default as AllergiesAlertScreen } from "./allergies-screen/AllergiesAlertScreen";
+export { default as PersonalizeVitaminScreen } from "./personalize-vitamin-screen/PersonalizeVitaminScreen"

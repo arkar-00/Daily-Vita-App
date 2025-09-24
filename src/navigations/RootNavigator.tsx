@@ -6,6 +6,7 @@ import {
   HealthConcernScreen,
   DietChoiceScreen,
   AllergiesAlertScreen,
+  PersonalizeVitaminScreen,
 } from "../screens";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>({
@@ -30,6 +31,12 @@ const RootStack = createNativeStackNavigator<RootStackParamList>({
     },
     AllergiesAlertScreen: {
       screen: AllergiesAlertScreen,
+      options: {
+        headerShown: false,
+      },
+    },
+    PersonalizeVitaminScreen: {
+      screen: PersonalizeVitaminScreen,
       options: {
         headerShown: false,
       },
