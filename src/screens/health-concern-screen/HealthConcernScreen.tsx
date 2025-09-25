@@ -1,11 +1,17 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import COLORS from "../../assets/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomButton, Draglist, SelectButton } from "../../components";
 import healthConcerns from "../../data/Healthconcern.json";
 import { selectedItem } from "../../components/SelectButton";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import {
+  setHealthConcern,
+  setHealthDrag,
+} from "../../redux/slices/onBoardingSlice";
 
 const HealthConcernScreen = () => {
   const navigation = useAppNavigation();
@@ -15,12 +21,11 @@ const HealthConcernScreen = () => {
   const onPressNext = () => {
     navigation.navigate("DietChoice");
   };
-  const [selected, setSelected] = useState<selectedItem[]>([]);
-  const [draggedItems, setDraggedItems] = useState<selectedItem[]>([]);
 
-  useEffect(() => {
-    setDraggedItems(selected);
-  }, [selected]);
+  const selected = useSelector(
+    (state: RootState) => state.onBoarding.healthConcern
+  );
+  const dispatch = useDispatch();
 
   const HConcernData = healthConcerns.data.map((item) => ({
     id: item.id,
@@ -28,11 +33,11 @@ const HealthConcernScreen = () => {
   }));
 
   function toggle(item: selectedItem) {
-    if (selected.find((i) => i.id === item.id)) {
-      setSelected(selected.filter((i) => i.id !== item.id));
-    } else {
-      setSelected([...selected, item]);
-    }
+    dispatch(setHealthConcern(item));
+  }
+
+  function drag(item: selectedItem[]) {
+    dispatch(setHealthDrag(item));
   }
 
   return (
@@ -52,7 +57,7 @@ const HealthConcernScreen = () => {
 
       <Text style={styles.title}>Prioritize</Text>
       <View style={{ flex: 1 }}>
-        <Draglist data={draggedItems} onChange={setDraggedItems} />
+        <Draglist data={selected} onChange={drag} />
       </View>
 
       <View style={styles.buttonContainer}>
