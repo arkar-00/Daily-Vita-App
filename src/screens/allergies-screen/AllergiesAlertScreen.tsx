@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from "../../assets/colors";
-import TagSearchSimple from "../../components/TagSearchSimple";
-import { CustomButton } from "../../components";
+import { CustomButton, TagSearchSimple } from "../../components";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setAllergies,
+  selectAllergies,
+} from "../../redux/slices/onBoardingSlice";
 
 const AllergiesAlertScreen = () => {
   const navigation = useAppNavigation();
@@ -14,7 +18,9 @@ const AllergiesAlertScreen = () => {
   const onPressNext = () => {
     navigation.navigate("PersonalizeVitaminScreen");
   };
-  const [selected, setSelected] = useState<string[]>([]);
+
+  const dispatch = useDispatch();
+  const selectedAllergies = useSelector(selectAllergies);
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -27,8 +33,9 @@ const AllergiesAlertScreen = () => {
         </View>
 
         <TagSearchSimple
+          value={selectedAllergies}
           placeholder="Type to search allergies…"
-          onChange={setSelected}
+          onChange={(list) => dispatch(setAllergies(list))}
         />
       </View>
 

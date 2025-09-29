@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Alert,
   FlatList,
@@ -13,41 +13,41 @@ import COLORS from "../../assets/colors";
 import dietsFile from "../../data/Diets.json";
 import { CustomButton } from "../../components";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
-
-type Diet = { id: number; name: string; tool_tip?: string };
+import { useDispatch, useSelector } from "react-redux";
+import {
+  toggleDiet,
+  selectDietSelectedIds,
+} from "../../redux/slices/onBoardingSlice";
+import { Diet } from "../../types";
 
 export default function DietChoiceScreen() {
   const navigation = useAppNavigation();
-    const onPressBack = () => {
-      navigation.goBack();
-    };
-    const onPressNext = () => {
-      navigation.navigate("AllergiesAlertScreen");
-    };
+  const dispatch = useDispatch();
+  const selectedIds = useSelector(selectDietSelectedIds);
+
+  const onPressBack = () => {
+    navigation.goBack();
+  };
+  const onPressNext = () => {
+    if (!selectedIds.length) {
+      Alert.alert("Select at least one", "Choose a diet or select None.");
+      return;
+    }
+    navigation.navigate("AllergiesAlertScreen");
+  };
   const dietData: Diet[] = [
     ...((dietsFile as { data: Diet[] }).data ?? []),
     { id: -1, name: "None" },
   ];
 
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
-
   const isNone = (d: Diet) => d.name.trim().toLowerCase() === "none";
 
   function toggle(diet: Diet) {
-    if (isNone(diet)) {
-      setSelectedIds((prev) => (prev.includes(diet.id) ? [] : [diet.id]));
-      return;
-    }
-    setSelectedIds((prev) => {
-      const withoutNone = prev.filter((id) => id !== -1);
-      return withoutNone.includes(diet.id)
-        ? withoutNone.filter((id) => id !== diet.id)
-        : [...withoutNone, diet.id];
-    });
+    dispatch(toggleDiet(diet));
   }
 
   const renderItem = ({ item }: { item: Diet }) => {
-    const checked = selectedIds.includes(item.id);
+    const checked = selectedIds.some((d) => d.id === item.id);
     const none = isNone(item);
 
     return (

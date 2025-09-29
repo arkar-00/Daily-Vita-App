@@ -15,44 +15,40 @@ const ALL_ITEMS: string[] = (allergies?.data ?? [])
   .filter(Boolean);
 
 export default function TagSearchSimple({
-  defaultTags = [],
+  value,
   placeholder = "Type to search…",
   onChange,
 }: {
-  defaultTags?: string[];
+  value: string[];
   placeholder?: string;
-  onChange?: (tags: string[]) => void;
+  onChange: (tags: string[]) => void;
 }) {
-  const [tags, setTags] = useState<string[]>(defaultTags);
   const [query, setQuery] = useState("");
 
   const suggestions = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    const chosen = new Set(tags.map((t) => t.toLowerCase()));
+    const chosen = new Set(value.map((t) => t.toLowerCase()));
     return ALL_ITEMS.filter((name) => !chosen.has(name.toLowerCase()))
       .filter((name) => name.toLowerCase().includes(q))
       .slice(0, 10);
-  }, [query, tags]);
+  }, [query, value]);
 
   function addTag(name: string) {
     const t = name.trim();
     if (!t) return;
-    const exists = tags.some((x) => x.toLowerCase() === t.toLowerCase());
+    const exists = value.some((x) => x.toLowerCase() === t.toLowerCase());
     if (exists) {
       setQuery("");
       return;
     }
-    const next = [...tags, t];
-    setTags(next);
+    onChange([...value, t]);
     setQuery("");
-    onChange?.(next);
   }
 
   function removeTag(index: number) {
-    const next = tags.filter((_, i) => i !== index);
-    setTags(next);
-    onChange?.(next);
+    const next = value.filter((_, i) => i !== index);
+    onChange(next);
   }
 
   return (
@@ -60,11 +56,11 @@ export default function TagSearchSimple({
       {/* chips + input */}
       <View style={styles.box}>
         <View style={styles.rowWrap}>
-          {tags.map((t, i) => (
+          {value.map((t, i) => (
             <View key={`${t}-${i}`} style={styles.chip}>
               <Text style={styles.chipText}>{t}</Text>
               <Pressable onPress={() => removeTag(i)} hitSlop={8}>
-                  <X style={styles.chipClose}/>
+                <X style={styles.chipClose} />
               </Pressable>
             </View>
           ))}
