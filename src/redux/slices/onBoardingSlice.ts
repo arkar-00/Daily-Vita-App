@@ -1,23 +1,31 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { Diet } from "../../types";
+import { HealthconcernType, Diet, Allergies } from "../../types";
 
-type HealthconcernType = { id: number; label: string };
+type VitaminAnswer = {
+  sunExposure: string | null;
+  smoke: string | null;
+  alcohol: string | null;
+};
 const NONE_ID = -1;
 
 export interface OnBoardingSlice {
   healthConcern: HealthconcernType[];
   selectedDiets: Diet[];
-  allergies: string[];
-  vitaminAnswers: Record<string, string | null>;
+  allergies: Allergies[];
+  vitaminAnswers: VitaminAnswer;
 }
 
 const initialState: OnBoardingSlice = {
   healthConcern: [],
   selectedDiets: [],
   allergies: [],
-  vitaminAnswers: {},
+  vitaminAnswers: {
+    sunExposure: null,
+    smoke: null,
+    alcohol: null,
+  },
 };
 
 export const onBoardingSlice = createSlice({
@@ -76,30 +84,31 @@ export const onBoardingSlice = createSlice({
       state.selectedDiets = [];
     },
 
-    setAllergies(state, action: PayloadAction<string[]>) {
+    setAllergies(state, action: PayloadAction<Allergies[]>) {
       state.allergies = action.payload ?? [];
     },
     clearAllergies(state) {
       state.allergies = [];
     },
 
-    setVitaminAnswers(
-      state,
-      action: PayloadAction<Record<string, string | null>>
-    ) {
+    setVitaminAnswers(state, action: PayloadAction<VitaminAnswer>) {
       state.vitaminAnswers = action.payload ?? {};
     },
 
     setVitaminAnswer(
       state,
-      action: PayloadAction<{ key: string; value: string }>
+      action: PayloadAction<{ key: keyof VitaminAnswer; value: string }>
     ) {
       const { key, value } = action.payload;
       state.vitaminAnswers[key] = value ?? null;
     },
 
     clearVitaminAnswers(state) {
-      state.vitaminAnswers = {};
+      state.vitaminAnswers = {
+        sunExposure: null,
+        smoke: null,
+        alcohol: null,
+      };
     },
   },
 });
@@ -132,13 +141,16 @@ export const selectDietCount = (s: RootState) =>
 
 export const selectAllergies = (s: RootState) => s.onBoarding.allergies;
 
-export const selectVitaminAnswer = (key: string) => (s: RootState) =>
-  s.onBoarding.vitaminAnswers[key] ?? null;
+export const selectVitaminAnswer =
+  (key: keyof VitaminAnswer) => (s: RootState) =>
+    s.onBoarding.vitaminAnswers[key] ?? null;
 
 export const selectVitaminAnswers = (s: RootState) =>
   s.onBoarding.vitaminAnswers;
 
-export const selectVitaminUnanswered = (catalog: { key: string }[]) =>
+export const selectVitaminUnanswered = (
+  catalog: { key: keyof VitaminAnswer }[]
+) =>
   createSelector(
     [selectVitaminAnswers],
     (answers) => catalog.filter((q) => !answers[q.key]).map((q) => q.key) // return just keys (or q itself if you prefer)
