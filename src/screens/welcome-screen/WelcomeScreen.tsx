@@ -3,9 +3,9 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, View } from "react-native";
 import COLORS from "../../assets/colors";
-import { CustomButton, LottieImage } from "../../components";
+import { AnimatedComponent, CustomButton, LottieImage } from "../../components";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
-
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 export default function WelcomeScreen() {
   const navigation = useAppNavigation();
@@ -16,25 +16,32 @@ export default function WelcomeScreen() {
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.header}>
-        <Text style={styles.title}>Welcome to DailyVita</Text>
-        <Text style={styles.subtitle}>
-          Hello, we are here to make your life healthier and happier
-        </Text>
+        <AnimatedComponent>
+          <Text style={styles.title}>Welcome to DailyVita</Text>
+        </AnimatedComponent>
+        <AnimatedComponent duration={500}>
+          <Text style={styles.subtitle}>
+            Hello, we are here to make your life healthier and happier
+          </Text>
+        </AnimatedComponent>
       </View>
+      <AnimatedComponent duration={600}>
+        <View style={styles.illusPlaceholder}>
+          <LottieImage source={require("../../assets/lottie/Welcome.json")} />
 
-      <View style={styles.illusPlaceholder}>
-        <LottieImage source={require("../../assets/lottie/Welcome.json")} />
-
-        <Text style={styles.body}>
-          We’ll ask a couple of questions to better understand your vitamin
-          needs.
-        </Text>
-      </View>
-      <CustomButton
-        onPress={onPress}
-        text="Get Started"
-        // disabled={true}
-      />
+          <Text style={styles.body}>
+            We’ll ask a couple of questions to better understand your vitamin
+            needs.
+          </Text>
+        </View>
+      </AnimatedComponent>
+      <AnimatedComponent duration={700}>
+        <CustomButton
+          onPress={onPress}
+          text="Get Started"
+          // disabled={true}
+        />
+      </AnimatedComponent>
 
       <StatusBar style="dark" />
     </SafeAreaView>
