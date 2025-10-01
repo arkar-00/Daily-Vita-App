@@ -1,8 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from "../../assets/colors";
-import { CustomButton, TagSearchSimple } from "../../components";
+import { CustomButton, TagSearchSimple, Screen } from "../../components";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -23,7 +22,7 @@ const AllergiesAlertScreen = () => {
   const selectedAllergies = useSelector(selectAllergies);
 
   return (
-    <SafeAreaView style={styles.screen}>
+    <Screen>
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.title}>
@@ -48,14 +47,13 @@ const AllergiesAlertScreen = () => {
         />
         <CustomButton text="Next" onPress={onPressNext} style={styles.button} />
       </View>
-    </SafeAreaView>
+    </Screen>
   );
 };
 
 export default AllergiesAlertScreen;
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: COLORS.bg, padding: 16 },
   content: { flex: 1 },
   header: { justifyContent: "flex-start", marginBottom: 12 },
   title: {

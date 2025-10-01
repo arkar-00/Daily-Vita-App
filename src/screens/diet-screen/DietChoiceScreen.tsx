@@ -7,11 +7,10 @@ import {
   Text,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { CheckSquare, Square, Info } from "lucide-react-native";
 import COLORS from "../../assets/colors";
 import dietsFile from "../../data/Diets.json";
-import { CustomButton } from "../../components";
+import { CustomButton, Screen } from "../../components";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -80,7 +79,7 @@ export default function DietChoiceScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.screen}>
+    <Screen>
       <Text style={styles.title}>
         Select the diets you follow.{" "}
         <Text style={{ color: COLORS.button }}>*</Text>
@@ -104,16 +103,11 @@ export default function DietChoiceScreen() {
         />
         <CustomButton text="Next" onPress={onPressNext} style={styles.button} />
       </View>
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: COLORS.bg,
-    padding: 16,
-  },
   title: {
     fontSize: 22,
     fontWeight: "700",

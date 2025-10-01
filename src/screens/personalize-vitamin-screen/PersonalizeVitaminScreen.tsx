@@ -1,17 +1,14 @@
 import React, { useMemo } from "react";
 import { StyleSheet, View, Alert } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import COLORS from "../../assets/colors";
-import { CustomButton, RadioButton } from "../../components";
+import { CustomButton, RadioButton, Screen } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
-import Allergies from "../../data/Allergies.json";
 import { RootState } from "../../redux/store";
 import {
   selectVitaminAnswers,
   selectVitaminUnanswered,
   setVitaminAnswer,
 } from "../../redux/slices/onBoardingSlice";
-import { Question } from "../../types";
+import { Question, VitaminAnswer } from "../../types";
 import { CATALOG } from "../../data/Catalog";
 
 // const healthConcern = useSelector((s: any) => s.onBoarding.healthConcern);
@@ -37,13 +34,18 @@ const PersonalizeVitaminScreen = () => {
     () =>
       CATALOG.map((q) => ({
         ...q,
-        value: answers[q.key] ?? null,
+        value: answers[q.key as keyof VitaminAnswer] ?? null,
       })),
     [answers]
   );
 
   const setAnswer = (key: string, value: string) => {
-    dispatch(setVitaminAnswer({ key, value }));
+    dispatch(
+      setVitaminAnswer({ key, value } as {
+        key: keyof VitaminAnswer;
+        value: string;
+      })
+    );
   };
 
   const selectUnanswered = useMemo(() => selectVitaminUnanswered(CATALOG), []);
@@ -59,16 +61,13 @@ const PersonalizeVitaminScreen = () => {
       health_concerns: healthConcern,
       diets: selectedDiets,
       is_daily_exposure: vitaminAnswers,
-      allergies: allergies.map((b) => {
-        const modifyData = Allergies.data.find((a) => a.name == b);
-        if (modifyData) return modifyData;
-      }),
+      allergies: allergies,
     };
     console.log("final output:", payload);
   };
 
   return (
-    <SafeAreaView style={styles.screen}>
+    <Screen>
       <View style={styles.content}>
         <RadioButton questions={questions} onChange={setAnswer} />
         <CustomButton
@@ -76,19 +75,13 @@ const PersonalizeVitaminScreen = () => {
           text="Get my personalized vitamin"
         />
       </View>
-    </SafeAreaView>
+    </Screen>
   );
 };
 
 export default PersonalizeVitaminScreen;
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: COLORS.bg,
-    justifyContent: "space-evenly",
-    padding: 16,
-  },
   content: {
     flex: 1,
     justifyContent: "space-between",

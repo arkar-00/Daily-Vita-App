@@ -1,11 +1,14 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, View } from "react-native";
 import COLORS from "../../assets/colors";
-import { AnimatedComponent, CustomButton, LottieImage } from "../../components";
+import {
+  AnimatedComponent,
+  CustomButton,
+  LottieImage,
+  Screen,
+} from "../../components";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
-import Animated, { FadeInDown } from "react-native-reanimated";
 
 export default function WelcomeScreen() {
   const navigation = useAppNavigation();
@@ -14,7 +17,7 @@ export default function WelcomeScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.screen}>
+    <Screen>
       <View style={styles.header}>
         <AnimatedComponent>
           <Text style={styles.title}>Welcome to DailyVita</Text>
@@ -44,16 +47,10 @@ export default function WelcomeScreen() {
       </AnimatedComponent>
 
       <StatusBar style="dark" />
-    </SafeAreaView>
+    </Screen>
   );
 }
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: COLORS.bg,
-    justifyContent: "space-evenly",
-    padding: 16,
-  },
   header: {
     justifyContent: "space-between",
   },

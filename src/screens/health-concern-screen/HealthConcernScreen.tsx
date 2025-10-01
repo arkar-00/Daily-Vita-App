@@ -1,8 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import COLORS from "../../assets/colors";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { CustomButton, Draglist, SelectButton } from "../../components";
+import { CustomButton, Draglist, SelectButton, Screen } from "../../components";
 import healthConcerns from "../../data/Healthconcern.json";
 import { selectedItem } from "../../components/SelectButton";
 import { useAppNavigation } from "../../hooks/useAppNavigation";
@@ -41,7 +40,7 @@ const HealthConcernScreen = () => {
   }
 
   return (
-    <SafeAreaView style={styles.screen}>
+    <Screen>
       <View style={styles.header}>
         <Text style={styles.title}>
           Select the top health concerns.
@@ -69,18 +68,13 @@ const HealthConcernScreen = () => {
         />
         <CustomButton text="Next" onPress={onPressNext} style={styles.button} />
       </View>
-    </SafeAreaView>
+    </Screen>
   );
 };
 
 export default HealthConcernScreen;
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: COLORS.bg,
-    padding: 16,
-  },
   header: {
     justifyContent: "flex-start",
   },

@@ -11,7 +11,7 @@ import { Question } from "../types";
 
 type Props = {
   questions: Question[];
-  onChange: (key: Question["key"], value: string) => void;
+  onChange: (key: string, value: string) => void;
 };
 
 const RadioButton = ({ questions, onChange }: Props) => {

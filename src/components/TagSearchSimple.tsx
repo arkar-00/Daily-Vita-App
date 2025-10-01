@@ -9,40 +9,45 @@ import {
 } from "react-native";
 import allergies from "../data/Allergies.json";
 import { X } from "lucide-react-native";
+import { Allergies } from "../types";
 
-const ALL_ITEMS: string[] = (allergies?.data ?? [])
-  .map((x: any) => String(x?.name ?? "").trim())
-  .filter(Boolean);
+const ALL_ITEMS: Allergies[] = allergies?.data;
 
 export default function TagSearchSimple({
   value,
   placeholder = "Type to search…",
   onChange,
 }: {
-  value: string[];
+  value: Allergies[];
   placeholder?: string;
-  onChange: (tags: string[]) => void;
+  onChange: (tags: Allergies[]) => void;
 }) {
   const [query, setQuery] = useState("");
 
   const suggestions = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    const chosen = new Set(value.map((t) => t.toLowerCase()));
-    return ALL_ITEMS.filter((name) => !chosen.has(name.toLowerCase()))
-      .filter((name) => name.toLowerCase().includes(q))
+    const chosen = new Set(value.map((t) => t.name.toLowerCase()));
+    return ALL_ITEMS.filter((item) => !chosen.has(item.name.toLowerCase()))
+      .filter((item) => item.name.toLowerCase().includes(q))
       .slice(0, 10);
   }, [query, value]);
 
   function addTag(name: string) {
-    const t = name.trim();
-    if (!t) return;
-    const exists = value.some((x) => x.toLowerCase() === t.toLowerCase());
+    const selectedItem = ALL_ITEMS.find(
+      (item) => item.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (!selectedItem) return;
+
+    const exists = value.some((x) => x.id === selectedItem.id);
+
     if (exists) {
       setQuery("");
       return;
     }
-    onChange([...value, t]);
+
+    onChange([...value, selectedItem]);
     setQuery("");
   }
 
@@ -58,7 +63,7 @@ export default function TagSearchSimple({
         <View style={styles.rowWrap}>
           {value.map((t, i) => (
             <View key={`${t}-${i}`} style={styles.chip}>
-              <Text style={styles.chipText}>{t}</Text>
+              <Text style={styles.chipText}>{t.name}</Text>
               <Pressable onPress={() => removeTag(i)} hitSlop={8}>
                 <X style={styles.chipClose} />
               </Pressable>
@@ -90,9 +95,9 @@ export default function TagSearchSimple({
                     styles.item,
                     pressed && styles.itemPressed,
                   ]}
-                  onPress={() => addTag(item)}
+                  onPress={() => addTag(item.name)}
                 >
-                  <Text style={styles.itemText}>{item}</Text>
+                  <Text style={styles.itemText}>{item.name}</Text>
                 </Pressable>
               )}
             />

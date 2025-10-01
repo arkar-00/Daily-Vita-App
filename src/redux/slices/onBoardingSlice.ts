@@ -1,13 +1,8 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { HealthconcernType, Diet, Allergies } from "../../types";
+import { HealthconcernType, Diet, Allergies, VitaminAnswer, CatalogQuestion } from "../../types";
 
-type VitaminAnswer = {
-  sunExposure: string | null;
-  smoke: string | null;
-  alcohol: string | null;
-};
 const NONE_ID = -1;
 
 export interface OnBoardingSlice {
@@ -149,11 +144,11 @@ export const selectVitaminAnswers = (s: RootState) =>
   s.onBoarding.vitaminAnswers;
 
 export const selectVitaminUnanswered = (
-  catalog: { key: keyof VitaminAnswer }[]
+  catalog: CatalogQuestion[]
 ) =>
   createSelector(
     [selectVitaminAnswers],
-    (answers) => catalog.filter((q) => !answers[q.key]).map((q) => q.key) // return just keys (or q itself if you prefer)
+    (answers) => catalog.filter((q) => !answers[q.key as keyof VitaminAnswer]).map((q) => q.key)
   );
 
 export default onBoardingSlice.reducer;
